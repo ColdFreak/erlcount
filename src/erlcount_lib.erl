@@ -10,12 +10,14 @@ find_erl(Directory) ->
 
 %% @doc まず渡された名前はディレクトリなのか、
 %% 一般ファイルなのかを判断する
+%% Priate
+%% Dispatches based on file type
 find_erl(Name, Queue) ->
     {ok, F=#file_info{}} = file:read_file_info(Name),
     case F#file_info.type of
         directory   -> handle_directory(Name, Queue);
         regular     -> handle_regular_file(Name, Queue);
-        _Other      -> dequeuq_and_run(Queue)
+        _Other      -> dequeue_and_run(Queue)
     end.
 
 
