@@ -1,1 +1,5 @@
 # erlcount
+
+```
+$ erl -make
+```
