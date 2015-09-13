@@ -29,10 +29,16 @@ complete(Pid, Regex, Ref, Count) ->
     gen_fsm:send_all_state_event(Pid, {complete, Regex, Ref, Count}).
 
 init([]) ->
+    %% `get_env(Par) -> undefined | {ok, Val}`
+    %% `get_env(Application, Par) -> undefined | {ok, Val}`
     {ok, Re} = application:get_env(regex),
     {ok, Dir} = application:get_env(directory),
     {ok, MaxFiles} = application:get_env(max_files),
     ppool:start_pool(?POOL, MaxFiles, {erlcount_counter, start_link, []}),
+    %% `lists:all(Pred, List) -> boolean()`
+    %% `Pred = fun((Elem :: T) -> boolean())`
+    %% Returns true if Pred(Elem) returns true 
+    %% for all elements Elem in List, otherwise false.
     case lists:all(fun valid_regex/1, Re) of
         true ->
             %% `handle_info`が処理してくれる
@@ -44,6 +50,8 @@ init([]) ->
 
                                     
 valid_regex(Re) ->
+    %% `run(Subject, RE) -> {match, Captured} | nomatch`
+    %% run(Subject, RE, [])と一緒
     try re:run("", Re) of
         _ -> true
     catch
