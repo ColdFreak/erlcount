@@ -1,5 +1,5 @@
 -module(erlcount_lib).
--export([find_erl/1]).
+-export([find_erl/1, regex_count/2]).
 -include_lib("kernel/include/file.hrl").
 
 
@@ -58,5 +58,9 @@ handle_regular_file(Name, Queue) ->
             dequeue_and_run(Queue)
     end.
 
-
+regex_count(Re, Str) ->
+    case re:run(Str, Re, [global]) of
+        nomatch -> 0;
+        {match, List} -> length(List)
+    end.
 
